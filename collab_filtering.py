@@ -47,6 +47,7 @@ class UserCF:
         picked_userid_watched = self.matrix_norm[
             self.matrix_norm.index == self.userId
         ].dropna(axis=1, how="all")
+        print(list(picked_userid_watched.columns))
 
         self.similar_user_movies = self.matrix_norm[
             self.matrix_norm.index.isin(self.similar_users.index)
@@ -80,12 +81,11 @@ class UserCF:
             item_score[i] = total / count
         # Convert dictionary to pandas dataframe
         item_score = pd.DataFrame(item_score.items(), columns=["movie", "movie_score"])
-
         # Sort the movies by score
-        ranked_item_score = item_score.sort_values(by="movie_score", ascending=False)
-        # Select top m movies
-        m = 10
-        print(ranked_item_score(m))
+        self.ranked_item_score = item_score.sort_values(by="movie_score", ascending=False)["movie"]
+
+    def rec(self):
+        pass
 
 
 if __name__ == "__main__":
@@ -95,3 +95,4 @@ if __name__ == "__main__":
     userCF.calc_user_sim()
     userCF.narrow_down_item_pool()
     userCF.get_rec()
+    userCF.rec()
